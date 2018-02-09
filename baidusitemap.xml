@@ -3,6 +3,26 @@
 
 
     
+  <url>
+    <loc>https://crazylook.github.io/2014/09/09/hexo/git-notes1/</loc>
+    <lastmod>2018-02-09T07:01:51.466Z</lastmod>
+    <data>
+        <display>
+        <title>git使用记录</title>
+        <pubTime>2014-09-09T15:25:31.000Z</pubTime>
+        
+        <tag>git</tag>
+         
+         
+           
+             
+              <breadCrumb title="Hexo" url="https://crazylook.github.io/categories/Hexo/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
     
     
     
@@ -80,26 +100,6 @@
         <pubTime>2014-05-17T03:14:41.000Z</pubTime>
         
         <tag>Hexo优化</tag>
-         
-         
-           
-             
-              <breadCrumb title="Hexo" url="https://crazylook.github.io/categories/Hexo/"/>
-          
-        </display>
-    </data>
-    </url>
-
-    
-  <url>
-    <loc>https://crazylook.github.io/2014/09/09/hexo/git-notes1/</loc>
-    <lastmod>2018-02-09T04:06:50.456Z</lastmod>
-    <data>
-        <display>
-        <title>git使用记录</title>
-        <pubTime>2014-09-09T15:25:31.000Z</pubTime>
-        
-        <tag>git</tag>
          
          
            
