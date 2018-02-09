@@ -1,0 +1,15 @@
+User-agent: *
+Allow: /
+Allow: /archives/
+Allow: /categories/
+Allow: /about/
+Allow: /tags/
+
+Disallow: /js/
+Disallow: /css/
+Disallow: /font/
+Disallow: /img/
+Disallow: /images/
+Disallow: /fancybox/
+
+Sitemap: http://crazylook.github.io/sitemap.xml
