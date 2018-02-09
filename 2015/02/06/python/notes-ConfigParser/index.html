@@ -1,0 +1,652 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/vendors/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/vendors/font-awesome/css/font-awesome.min.css?v=4.4.0" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.0.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="python,ConfigParser," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.0.1" />
+
+
+
+
+
+
+<meta name="description" content="Python ConfigParser的使用经验 1.基本的读取配置文件123456-read(filename) 直接读取ini文件内容-sections() 得到所有的section，并以列表的形式返回-options(section) 得到该section的所有option-items(section) 得到该section的所有键值对-get(section,option) 得到secti">
+<meta name="keywords" content="python,ConfigParser">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Python ConfigParser的使用">
+<meta property="og:url" content="https://crazylook.github.io/2015/02/06/python/notes-ConfigParser/index.html">
+<meta property="og:site_name" content="crazylook&#39;s blog">
+<meta property="og:description" content="Python ConfigParser的使用经验 1.基本的读取配置文件123456-read(filename) 直接读取ini文件内容-sections() 得到所有的section，并以列表的形式返回-options(section) 得到该section的所有option-items(section) 得到该section的所有键值对-get(section,option) 得到secti">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2018-02-09T04:02:59.886Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Python ConfigParser的使用">
+<meta name="twitter:description" content="Python ConfigParser的使用经验 1.基本的读取配置文件123456-read(filename) 直接读取ini文件内容-sections() 得到所有的section，并以列表的形式返回-options(section) 得到该section的所有option-items(section) 得到该section的所有键值对-get(section,option) 得到secti">
+
+
+
+<script type="text/javascript" id="hexo.configuration">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    scheme: 'Pisces',
+    sidebar: {"position":"left","display":"post"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: 0,
+      author: '博主'
+    }
+  };
+</script>
+
+  <title> Python ConfigParser的使用 | crazylook's blog </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "//hm.baidu.com/hm.js?f07d67c93535fcf548e2bc032f8737b9";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">crazylook's blog</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle">Python、Spark、ML、DL、推荐</p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-commonweal">
+          <a href="/404.html" rel="section">
+            
+            公益404
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                Python ConfigParser的使用
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2015-02-06T10:15:31+08:00" content="2015-02-06">
+              2015-02-06
+            </time>
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp;
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/python/" itemprop="url" rel="index">
+                    <span itemprop="name">python</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>Python ConfigParser的使用经验</p>
+<h1 id="1-基本的读取配置文件"><a href="#1-基本的读取配置文件" class="headerlink" title="1.基本的读取配置文件"></a>1.基本的读取配置文件</h1><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">-read(filename) 直接读取ini文件内容</span><br><span class="line">-sections() 得到所有的section，并以列表的形式返回</span><br><span class="line">-options(section) 得到该section的所有option</span><br><span class="line">-items(section) 得到该section的所有键值对</span><br><span class="line">-get(section,option) 得到section中option的值，返回为string类型</span><br><span class="line">-getint(section,option) 得到section中option的值，返回为int类型，还有相应的getboolean()和getfloat() 函数。</span><br></pre></td></tr></table></figure>
+<h1 id="2-基本的写入配置文件"><a href="#2-基本的写入配置文件" class="headerlink" title="2.基本的写入配置文件"></a>2.基本的写入配置文件</h1><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">-add_section(section) 添加一个新的section</span><br><span class="line">-set( section, option, value) 对section中的option进行设置，需要调用write将内容写入配置文件。</span><br></pre></td></tr></table></figure>
+<p>3.基本例子</p>
+<ul>
+<li>test.conf</li>
+</ul>
+<p>[sec_a]<br>a_key1 = 20<br>a_key2 = 10</p>
+<p>[sec_b]<br>b_key1 = 121<br>b_key2 = b_value2<br>b_key3 = $r<br>b_key4 = 127.0.0.1</p>
+<ul>
+<li>parse_test_conf.py<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br></pre></td><td class="code"><pre><span class="line">#!/usr/bin/env python</span><br><span class="line">#coding:utf8</span><br><span class="line"></span><br><span class="line">import ConfigParser</span><br><span class="line"></span><br><span class="line">cf = ConfigParser.ConfigParser()</span><br><span class="line"></span><br><span class="line">#read config</span><br><span class="line">cf.read(&quot;test.conf&quot;)</span><br><span class="line"></span><br><span class="line"># return all section</span><br><span class="line">secs = cf.sections()</span><br><span class="line">print &apos;sections:&apos;, secs</span><br><span class="line"></span><br><span class="line">opts = cf.options(&quot;sec_a&quot;)</span><br><span class="line">print &apos;options:&apos;, opts</span><br><span class="line"></span><br><span class="line">kvs = cf.items(&quot;sec_a&quot;)</span><br><span class="line">print &apos;sec_a:&apos;, kvs</span><br><span class="line"></span><br><span class="line">#read by type</span><br><span class="line">str_val = cf.get(&quot;sec_a&quot;, &quot;a_key1&quot;)</span><br><span class="line">int_val = cf.getint(&quot;sec_a&quot;, &quot;a_key2&quot;)</span><br><span class="line"></span><br><span class="line">print &quot;value for sec_a&apos;s a_key1:&quot;, str_val</span><br><span class="line">print &quot;value for sec_a&apos;s a_key2:&quot;, int_val</span><br><span class="line"></span><br><span class="line">#write config</span><br><span class="line">#update value</span><br><span class="line">cf.set(&quot;sec_b&quot;, &quot;b_key3&quot;, &quot;new-$r&quot;)</span><br><span class="line">#set a new value</span><br><span class="line">cf.set(&quot;sec_b&quot;, &quot;b_newkey&quot;, &quot;new-value&quot;)</span><br><span class="line">#create a new section</span><br><span class="line">cf.add_section(&apos;a_new_section&apos;)</span><br><span class="line">cf.set(&apos;a_new_section&apos;, &apos;new_key&apos;, &apos;new_value&apos;)</span><br><span class="line"></span><br><span class="line">#write back to configure file</span><br><span class="line">cf.write(open(&quot;test.conf&quot;, &quot;w&quot;))</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<p>得到终端输出：<br>sections: [‘sec_b’, ‘sec_a’]<br>options: [‘a_key1’, ‘a_key2’]<br>sec_a: [(‘a_key1’, “i’m value”), (‘a_key2’, ‘22’)]<br>value for sec_a’s a_key1: i’m value<br>value for sec_a’s a_key2: 22</p>
+<p>更新后的test.conf</p>
+<p>[sec_b]<br>b_newkey = new-value<br>b_key4 = 127.0.0.1<br>b_key1 = 121<br>b_key2 = b_value2<br>b_key3 = new-$r</p>
+<p>[sec_a]<br>a_key1 = i’m value<br>a_key2 = 22</p>
+<p>[a_new_section]<br>new_key = new_value</p>
+<h1 id="4-Python的ConfigParser-Module"><a href="#4-Python的ConfigParser-Module" class="headerlink" title="4.Python的ConfigParser Module"></a>4.Python的ConfigParser Module</h1><p>Python的ConfigParser Module中定义了3个类对INI文件进行操作。分别是RawConfigParser、ConfigParser、SafeConfigParser。RawCnfigParser是最基础的INI文件读取类，ConfigParser、SafeConfigParser支持对%(value)s变量的解析。</p>
+<p>设定配置文件test2.conf</p>
+<p>[portal]<br>url = <a href="http://%(host)s:%(port)s/Portal" target="_blank" rel="noopener">http://%(host)s:%(port)s/Portal</a><br>host = localhost<br>port = 8080</p>
+<p>使用RawConfigParser：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">import ConfigParser</span><br><span class="line"></span><br><span class="line">cf = ConfigParser.RawConfigParser()</span><br><span class="line"></span><br><span class="line">print &quot;use RawConfigParser() read&quot;</span><br><span class="line">cf.read(&quot;test2.conf&quot;)</span><br><span class="line">print cf.get(&quot;portal&quot;, &quot;url&quot;)</span><br><span class="line"></span><br><span class="line">print &quot;use RawConfigParser() write&quot;</span><br><span class="line">cf.set(&quot;portal&quot;, &quot;url2&quot;, &quot;%(host)s:%(port)s&quot;)</span><br><span class="line">print cf.get(&quot;portal&quot;, &quot;url2&quot;)</span><br></pre></td></tr></table></figure></p>
+<p>得到终端输出：<br>use RawConfigParser() read<br><a href="http://%(host)s:%(port)s/Portal" target="_blank" rel="noopener">http://%(host)s:%(port)s/Portal</a><br>use RawConfigParser() write<br>%(host)s:%(port)s</p>
+<p>改用ConfigParser：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">import ConfigParser</span><br><span class="line"></span><br><span class="line">cf = ConfigParser.ConfigParser()</span><br><span class="line"></span><br><span class="line">print &quot;use ConfigParser() read&quot;</span><br><span class="line">cf.read(&quot;test2.conf&quot;)</span><br><span class="line">print cf.get(&quot;portal&quot;, &quot;url&quot;)</span><br><span class="line"></span><br><span class="line">print &quot;use ConfigParser() write&quot;</span><br><span class="line">cf.set(&quot;portal&quot;, &quot;url2&quot;, &quot;%(host)s:%(port)s&quot;)</span><br><span class="line">print cf.get(&quot;portal&quot;, &quot;url2&quot;)</span><br></pre></td></tr></table></figure></p>
+<p>得到终端输出：<br>use ConfigParser() read<br><a href="http://localhost:8080/Portal" target="_blank" rel="noopener">http://localhost:8080/Portal</a><br>use ConfigParser() write<br>localhost:8080</p>
+<p>改用SafeConfigParser：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">import ConfigParser</span><br><span class="line"></span><br><span class="line">cf = ConfigParser.SafeConfigParser()</span><br><span class="line"></span><br><span class="line">print &quot;use SafeConfigParser() read&quot;</span><br><span class="line">cf.read(&quot;test2.conf&quot;)</span><br><span class="line">print cf.get(&quot;portal&quot;, &quot;url&quot;)</span><br><span class="line"></span><br><span class="line">print &quot;use SateConfigParser() write&quot;</span><br><span class="line">cf.set(&quot;portal&quot;, &quot;url2&quot;, &quot;%(host)s:%(port)s&quot;)</span><br><span class="line">print cf.get(&quot;portal&quot;, &quot;url2&quot;)</span><br></pre></td></tr></table></figure></p>
+<p>得到终端输出(效果同ConfigParser)：<br>use SafeConfigParser() read<br><a href="http://localhost:8080/Portal" target="_blank" rel="noopener">http://localhost:8080/Portal</a><br>use SateConfigParser() write<br>localhost:8080</p>
+<a id="more"></a>
+<blockquote>
+<p><strong>关于作者</strong></p>
+<ul>
+<li>crazylook: pyhton,spark,ml,dl,recsys</li>
+<li>blog: <a href="https://crazylook.github.io/">https://crazylook.github.io/</a></li>
+<li>email: liuhongbin1990@foxmail.com</li>
+</ul>
+<p><strong>转载请注明出处：</strong><br><a href="https://crazylook.github.io/2015/02/06/python/notes-ConfigParser/">https://crazylook.github.io/2015/02/06/python/notes-ConfigParser/</a></p>
+</blockquote>
+
+      
+    </div>
+
+    <div>
+      
+        
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/python/" rel="tag">#python</a>
+          
+            <a href="/tags/ConfigParser/" rel="tag">#ConfigParser</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2014/09/09/hexo/git-notes1/" rel="next" title="git使用记录">
+                <i class="fa fa-chevron-left"></i> git使用记录
+              </a>
+            
+          </div>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2015/02/06/python/notes-Regulator/" rel="prev" title="Python 正则表达式">
+                Python 正则表达式 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel ">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/avatar.jpg"
+               alt="crazylook" />
+          <p class="site-author-name" itemprop="name">crazylook</p>
+          <p class="site-description motion-element" itemprop="description">Python、Spark、ML、DL、推荐</p>
+        </div>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">13</span>
+              <span class="site-state-item-name">日志</span>
+            </a>
+          </div>
+
+          
+            <div class="site-state-item site-state-categories">
+              <a href="/categories">
+                <span class="site-state-item-count">6</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              <a href="/tags">
+                <span class="site-state-item-count">15</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        
+        
+
+        
+        
+
+      </section>
+
+      
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+            
+              
+            
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#1-基本的读取配置文件"><span class="nav-number">1.</span> <span class="nav-text">1.基本的读取配置文件</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#2-基本的写入配置文件"><span class="nav-number">2.</span> <span class="nav-text">2.基本的写入配置文件</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#4-Python的ConfigParser-Module"><span class="nav-number">3.</span> <span class="nav-text">4.Python的ConfigParser Module</span></a></li></ol></div>
+            
+          </div>
+        </section>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">crazylook</span>
+</div>
+
+<div class="powered-by">
+  由 <a class="theme-link" href="http://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Pisces
+  </a>
+</div>
+
+        
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+  <script type="text/javascript" src="/vendors/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/vendors/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.0.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.0.1"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.0.1"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.0.1"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.0.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.0.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.0.1"></script>
+
+
+
+  
+
+
+
+  
+
+
+
+  
+  
+  
+
+  
+
+  
+
+</body>
+</html>

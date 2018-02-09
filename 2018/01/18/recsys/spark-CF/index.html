@@ -1,0 +1,630 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/vendors/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/vendors/font-awesome/css/font-awesome.min.css?v=4.4.0" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.0.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="ItemCF," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.0.1" />
+
+
+
+
+
+
+<meta name="description" content="前言以下为对实际生产环境中ItemCF、UserCF召回策略的总结 1. Spark中带分数的itemBaseCF1.1 不考虑用户打分的差异性12345671.item , (user,score)2.item , list[(user,score)] ==&amp;gt; item , sqrt(|item|) --&amp;gt; sqrt_item3.item , (user,score,sqrt_ite">
+<meta name="keywords" content="ItemCF">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Spark中实现ItemCF、UserCF">
+<meta property="og:url" content="https://crazylook.github.io/2018/01/18/recsys/spark-CF/index.html">
+<meta property="og:site_name" content="crazylook&#39;s blog">
+<meta property="og:description" content="前言以下为对实际生产环境中ItemCF、UserCF召回策略的总结 1. Spark中带分数的itemBaseCF1.1 不考虑用户打分的差异性12345671.item , (user,score)2.item , list[(user,score)] ==&amp;gt; item , sqrt(|item|) --&amp;gt; sqrt_item3.item , (user,score,sqrt_ite">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2018-02-09T04:00:19.232Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Spark中实现ItemCF、UserCF">
+<meta name="twitter:description" content="前言以下为对实际生产环境中ItemCF、UserCF召回策略的总结 1. Spark中带分数的itemBaseCF1.1 不考虑用户打分的差异性12345671.item , (user,score)2.item , list[(user,score)] ==&amp;gt; item , sqrt(|item|) --&amp;gt; sqrt_item3.item , (user,score,sqrt_ite">
+
+
+
+<script type="text/javascript" id="hexo.configuration">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    scheme: 'Pisces',
+    sidebar: {"position":"left","display":"post"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: 0,
+      author: '博主'
+    }
+  };
+</script>
+
+  <title> Spark中实现ItemCF、UserCF | crazylook's blog </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "//hm.baidu.com/hm.js?f07d67c93535fcf548e2bc032f8737b9";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">crazylook's blog</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle">Python、Spark、ML、DL、推荐</p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-commonweal">
+          <a href="/404.html" rel="section">
+            
+            公益404
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                Spark中实现ItemCF、UserCF
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2018-01-18T10:20:00+08:00" content="2018-01-18">
+              2018-01-18
+            </time>
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp;
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/recsys/" itemprop="url" rel="index">
+                    <span itemprop="name">recsys</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p><strong>前言</strong><br>以下为对实际生产环境中ItemCF、UserCF召回策略的总结</p>
+<h1 id="1-Spark中带分数的itemBaseCF"><a href="#1-Spark中带分数的itemBaseCF" class="headerlink" title="1. Spark中带分数的itemBaseCF"></a>1. Spark中带分数的itemBaseCF</h1><h2 id="1-1-不考虑用户打分的差异性"><a href="#1-1-不考虑用户打分的差异性" class="headerlink" title="1.1 不考虑用户打分的差异性"></a>1.1 不考虑用户打分的差异性</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">1.item , (user,score)</span><br><span class="line">2.item , list[(user,score)] ==&gt; item , sqrt(|item|) --&gt; sqrt_item</span><br><span class="line">3.item , (user,score,sqrt_item) ==&gt; user , list[(item,score,sqrt_item)]</span><br><span class="line">4.cal_score  (item1,item2), item1_score * item2_score/sqrt_item1 * sqrt_item2          </span><br><span class="line">5.group by add =&gt; (item1,item2) , similar_score   ---这就是余弦距离的计算方法sim=dot(d1,d2)/sqrt(|d1|)*sqrt(|d2|)</span><br><span class="line">6.item1，list[(item2,similar_score)]</span><br><span class="line">7.item1, list[topK]</span><br></pre></td></tr></table></figure>
+<h2 id="1-2-考虑用户打分的差异性"><a href="#1-2-考虑用户打分的差异性" class="headerlink" title="1.2 考虑用户打分的差异性"></a>1.2 考虑用户打分的差异性</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">-1.user , (item,score)</span><br><span class="line">-2.user , list[(item,score)] ==&gt; user, avg(score) --》 avg_score</span><br><span class="line">-3.user , (item,score,avg_score) ==&gt; user , (item,adj_score)</span><br><span class="line">下面的score就是上面的adj_score</span><br><span class="line">1.item , (user,score)</span><br><span class="line">2.item , list[(user,score)] ==&gt; item , sqrt(|item|) --&gt; sqrt_item</span><br><span class="line">3.item , (user,score,sqrt_item) ==&gt; user , list[(item,score,sqrt_item)]</span><br><span class="line">4.cal_score  (item1,item2), item1_score * item2_score/sqrt_item1 * sqrt_item2          </span><br><span class="line">5.group by add =&gt; (item1,item2) , similar_score   ---这就是余弦距离的计算方法sim=dot(d1,d2)/sqrt(|d1|)*sqrt(|d2|)</span><br><span class="line">6.item1，list[(item2,similar_score)]</span><br><span class="line">7.item1, list[topK]</span><br></pre></td></tr></table></figure>
+<h1 id="2-Spark中不带分数的itemBaseCF"><a href="#2-Spark中不带分数的itemBaseCF" class="headerlink" title="2. Spark中不带分数的itemBaseCF"></a>2. Spark中不带分数的itemBaseCF</h1><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">1.item , user</span><br><span class="line">2.item , list[user] ==&gt; item , sqrt(item_cnt) --&gt; sqrt_item</span><br><span class="line">3.item , (user,sqrt_item) ==&gt; user , list[(item,sqrt_item)]</span><br><span class="line">4.cal_score  (item1,item2), 1 * 1/sqrt_item1 * sqrt_item2          </span><br><span class="line">5.group by add =&gt; (item1,item2) , similar_score   ---这就是余弦距离的计算方法sim=d1_d2_cnt/sqrt(d1_cnt)*sqrt(d2_cnt)</span><br><span class="line">6.item1，list[(item2,similar_score)]</span><br><span class="line">7.item1, list[topK]</span><br></pre></td></tr></table></figure>
+<p>注:</p>
+<ol>
+<li>计算方法 只是把上面余弦距离的score全都置为1了</li>
+<li>本方法最终也就是是共现矩阵的余弦相似度计算方法 d1_d2_cnt/sqrt(d1_cnt*d1_cnt)</li>
+</ol>
+<h1 id="3-cal-score相似度-计算方法"><a href="#3-cal-score相似度-计算方法" class="headerlink" title="3. cal_score相似度 计算方法"></a>3. cal_score相似度 计算方法</h1><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line">def cal_score(line):</span><br><span class="line">&quot;&quot;&quot;</span><br><span class="line">Args: line:汇总的一个用户的评分行为，tuple格式为：(user, list[(item,score,sqrt_item)])</span><br><span class="line">Returns: item间相似度，tuple格式为:(item1\1item2, similar_score)</span><br><span class="line">&quot;&quot;&quot;</span><br><span class="line">user,item = line</span><br><span class="line">index1 = 0</span><br><span class="line">while index1 &lt; len(item):</span><br><span class="line">    index2 = index1 + 1</span><br><span class="line">    while index2 &lt; len(item):</span><br><span class="line"></span><br><span class="line">        if item[index1][0] == item[index2][0] :</span><br><span class="line">            index2 += 1</span><br><span class="line">            continue</span><br><span class="line"></span><br><span class="line">        item1_score = float(item[index1][1])</span><br><span class="line">        item1_score = float(item[index2][1])</span><br><span class="line">        sqrt_item1 = float(item[index1][2])</span><br><span class="line">        sqrt_item2 = float(item[index2][2])</span><br><span class="line">        try:</span><br><span class="line">            similar = item1_score*item2_score/(sqrt_item1*sqrt_item2)</span><br><span class="line">            if item[index1][0] != None and item[index2][0] != None:</span><br><span class="line">                 key = item[index1][0] + &quot;\1&quot; + item[index2][0]</span><br><span class="line">                 yield (key, similar)</span><br><span class="line">        except:</span><br><span class="line">            pass</span><br><span class="line">        index2 += 1</span><br><span class="line">    index1 += 1</span><br></pre></td></tr></table></figure>
+<h1 id="4-UserCF-和ItemCF原理相同"><a href="#4-UserCF-和ItemCF原理相同" class="headerlink" title="4. UserCF 和ItemCF原理相同"></a>4. UserCF 和ItemCF原理相同</h1><p>将user , list[(item,score,sqrt_item)] 换为 item , list[(user,score,sqrt_user)] 即可</p>
+<a id="more"></a>
+<blockquote>
+<p><strong>关于作者</strong></p>
+<ul>
+<li>crazylook: pyhton,spark,ml,dl,recsys</li>
+<li>blog: <a href="https://crazylook.github.io/">https://crazylook.github.io/</a></li>
+<li>email: liuhongbin1990@foxmail.com</li>
+</ul>
+<p><strong>转载请注明出处：</strong><br><a href="https://crazylook.github.io/2018/01/18/recsys/spark-CF">https://crazylook.github.io/2018/01/18/recsys/spark-CF</a></p>
+</blockquote>
+
+      
+    </div>
+
+    <div>
+      
+        
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/ItemCF/" rel="tag">#ItemCF</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2015/02/06/python/notes-Regulator/" rel="next" title="Python 正则表达式">
+                <i class="fa fa-chevron-left"></i> Python 正则表达式
+              </a>
+            
+          </div>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel ">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/avatar.jpg"
+               alt="crazylook" />
+          <p class="site-author-name" itemprop="name">crazylook</p>
+          <p class="site-description motion-element" itemprop="description">Python、Spark、ML、DL、推荐</p>
+        </div>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">13</span>
+              <span class="site-state-item-name">日志</span>
+            </a>
+          </div>
+
+          
+            <div class="site-state-item site-state-categories">
+              <a href="/categories">
+                <span class="site-state-item-count">6</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              <a href="/tags">
+                <span class="site-state-item-count">15</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        
+        
+
+        
+        
+
+      </section>
+
+      
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+            
+              
+            
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#1-Spark中带分数的itemBaseCF"><span class="nav-number">1.</span> <span class="nav-text">1. Spark中带分数的itemBaseCF</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-1-不考虑用户打分的差异性"><span class="nav-number">1.1.</span> <span class="nav-text">1.1 不考虑用户打分的差异性</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#1-2-考虑用户打分的差异性"><span class="nav-number">1.2.</span> <span class="nav-text">1.2 考虑用户打分的差异性</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#2-Spark中不带分数的itemBaseCF"><span class="nav-number">2.</span> <span class="nav-text">2. Spark中不带分数的itemBaseCF</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#3-cal-score相似度-计算方法"><span class="nav-number">3.</span> <span class="nav-text">3. cal_score相似度 计算方法</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#4-UserCF-和ItemCF原理相同"><span class="nav-number">4.</span> <span class="nav-text">4. UserCF 和ItemCF原理相同</span></a></li></ol></div>
+            
+          </div>
+        </section>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">crazylook</span>
+</div>
+
+<div class="powered-by">
+  由 <a class="theme-link" href="http://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Pisces
+  </a>
+</div>
+
+        
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+  <script type="text/javascript" src="/vendors/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/vendors/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.0.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.0.1"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.0.1"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.0.1"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.0.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.0.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.0.1"></script>
+
+
+
+  
+
+
+
+  
+
+
+
+  
+  
+  
+
+  
+
+  
+
+</body>
+</html>

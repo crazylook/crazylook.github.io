@@ -1,0 +1,674 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/vendors/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/vendors/font-awesome/css/font-awesome.min.css?v=4.4.0" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.0.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="RHadoop,RHive," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.0.1" />
+
+
+
+
+
+
+<meta name="description" content="RHadoop（rhdfs、rmr2、RHive）安装、配置 1.系统及所需软件版本　　服务器操作系统：CentOS 6.4　　R语言版本：R-2.15.3.tar.gz　　JDK版本：jdk-6u45-linux-i586.bin　　Hadoop版本：hadoop-1.0.3.tar.gz　　Hive版本：hive-0.9.0.tar.gz　　MySQL版本：MySQL-client-5.5.2">
+<meta name="keywords" content="RHadoop,RHive">
+<meta property="og:type" content="article">
+<meta property="og:title" content="RHadoop（rhdfs、rmr2、RHive）安装、配置">
+<meta property="og:url" content="https://crazylook.github.io/2014/05/15/demo/rhadoop-rhive-install/index.html">
+<meta property="og:site_name" content="crazylook&#39;s blog">
+<meta property="og:description" content="RHadoop（rhdfs、rmr2、RHive）安装、配置 1.系统及所需软件版本　　服务器操作系统：CentOS 6.4　　R语言版本：R-2.15.3.tar.gz　　JDK版本：jdk-6u45-linux-i586.bin　　Hadoop版本：hadoop-1.0.3.tar.gz　　Hive版本：hive-0.9.0.tar.gz　　MySQL版本：MySQL-client-5.5.2">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2018-02-09T04:08:42.659Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="RHadoop（rhdfs、rmr2、RHive）安装、配置">
+<meta name="twitter:description" content="RHadoop（rhdfs、rmr2、RHive）安装、配置 1.系统及所需软件版本　　服务器操作系统：CentOS 6.4　　R语言版本：R-2.15.3.tar.gz　　JDK版本：jdk-6u45-linux-i586.bin　　Hadoop版本：hadoop-1.0.3.tar.gz　　Hive版本：hive-0.9.0.tar.gz　　MySQL版本：MySQL-client-5.5.2">
+
+
+
+<script type="text/javascript" id="hexo.configuration">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    scheme: 'Pisces',
+    sidebar: {"position":"left","display":"post"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: 0,
+      author: '博主'
+    }
+  };
+</script>
+
+  <title> RHadoop（rhdfs、rmr2、RHive）安装、配置 | crazylook's blog </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "//hm.baidu.com/hm.js?f07d67c93535fcf548e2bc032f8737b9";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">crazylook's blog</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle">Python、Spark、ML、DL、推荐</p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-commonweal">
+          <a href="/404.html" rel="section">
+            
+            公益404
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                RHadoop（rhdfs、rmr2、RHive）安装、配置
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2014-05-15T11:15:30+08:00" content="2014-05-15">
+              2014-05-15
+            </time>
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp;
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/那些年的小项目/" itemprop="url" rel="index">
+                    <span itemprop="name">那些年的小项目</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>RHadoop（rhdfs、rmr2、RHive）安装、配置</p>
+<h1 id="1-系统及所需软件版本"><a href="#1-系统及所需软件版本" class="headerlink" title="1.系统及所需软件版本"></a>1.系统及所需软件版本</h1><p>　　服务器操作系统：CentOS 6.4<br>　　R语言版本：R-2.15.3.tar.gz<br>　　JDK版本：jdk-6u45-linux-i586.bin<br>　　Hadoop版本：hadoop-1.0.3.tar.gz<br>　　Hive版本：hive-0.9.0.tar.gz<br>　　MySQL版本：MySQL-client-5.5.21-1.linux2.6.i386.rpm<br>　　 MySQL-server-5.5.21-1.linux2.6.i386.rpm<br>　　rJava版本：rJava_0.9-5.tar.gz<br>　　RHadoop版本：rhdfs_1.0.5.tar.gz    rmr2_2.2.0.tar.gz    rhbase_1.1.1.tar.gz<br>　　下载地址：<br><a href="https://github.com/RevolutionAnalytics/RHadoop/wiki/Downloads" target="_blank" rel="noopener">https://github.com/RevolutionAnalytics/RHadoop/wiki/Downloads</a></p>
+<h1 id="2-依赖安装（R语言包、rJava包）"><a href="#2-依赖安装（R语言包、rJava包）" class="headerlink" title="2.依赖安装（R语言包、rJava包）"></a>2.依赖安装（R语言包、rJava包）</h1><p>　　在安装之前需要在集群各个主机上逐个安装R语言包、rJava包，然后再进行Rhadoop的安装。具体安装步骤如下：</p>
+<h2 id="2-1安装R语言包"><a href="#2-1安装R语言包" class="headerlink" title="2.1安装R语言包"></a>2.1安装R语言包</h2><p>　　在编译R之前，需要通过yum安装以下几个程序：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line">&gt; # 检查R是否支持PNG等图形显示：</span><br><span class="line">&gt; capabilities()</span><br><span class="line">jpeg      png</span><br><span class="line">TRUE     FALSE</span><br><span class="line">首先，退出R，然后安装一堆相关的包</span><br><span class="line"># yum install libpng libpng-devel libtiff libtiff-devel libjpeg-turbo libjpeg-turbo-devel</span><br><span class="line"></span><br><span class="line"># yum install gcc-gfortran</span><br><span class="line">否则报”configure: error: No F77 compiler found”错误</span><br><span class="line"></span><br><span class="line"># yum install gcc gcc-c++</span><br><span class="line">否则报”configure: error: C++ preprocessor “/lib/cpp” fails sanity check”错误</span><br><span class="line"></span><br><span class="line"># yum install readline-devel</span><br><span class="line">否则报”--with-readline=yes (default) and headers/libs are not available”错误</span><br><span class="line"></span><br><span class="line"># yum install libXt-devel</span><br><span class="line">否则报”configure: error: --with-x=yes (default) and X11 headers/libs are not available”错误</span><br><span class="line"></span><br><span class="line">然后下载源代码,编译</span><br><span class="line"># cd /home/admin</span><br><span class="line"># wget http://cran.rstudio.com/src/base/R-2/R-2.15.3.tar.gz</span><br><span class="line"></span><br><span class="line"># tar -zxvf R-2.15.3.tar.gz</span><br><span class="line"># cd /usr/R-2.15.3</span><br><span class="line"># ./configure --prefix=/usr --disable-nls  --enable-R-shlib --with-libpng --with-jpeglib --with-libtiff --with-x</span><br><span class="line"># ./configure --prefix=/usr --disable-nls --enable-R-shlib/** (后面两个选项--disable-nls --enable-R-shlib是为RHive的安装座准备，如果不安装RHive可以省去)*/</span><br><span class="line"># make clean</span><br><span class="line"># make</span><br><span class="line"># make install</span><br><span class="line">安装完毕后查看，得到R的安装路径为/usr/lib/R ，即后来要设置的R_HOME所在的目录。</span><br></pre></td></tr></table></figure>
+<h2 id="2-2安装rJava包"><a href="#2-2安装rJava包" class="headerlink" title="2.2安装rJava包:"></a>2.2安装rJava包:</h2><pre><code>版本：rJava_0.9-5.tar.gz
+在联网的情况下，可以进入R命令，安装rJava包：
+</code></pre><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">&gt; install.packages(&quot;rJava&quot;)</span><br><span class="line">如果待安装机器不能上网，可以将源文件下载到本地，然后通过shell命令R CMD INSTALL ‘package_name’来安装：</span><br><span class="line">R CMD INSTALL &quot;rJava_0.9-5.tar.gz&quot;</span><br><span class="line">本教程的包，大部分都是都是本地安装的，只有Rserve等个别包。</span><br></pre></td></tr></table></figure>
+<pre><code>然后设置Java、Hadoop、R、Hive等相关环境变量（如果在搭建Cloudera Hadoop集群时已经设置好，做一下检查就OK）
+
+下面是RHadoop及RHive安装成功时/etc/profile中的环境变量配置情况
+</code></pre><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line">#Java environment</span><br><span class="line">export JAVA_HOME=/usr/java/jdk1.6.0_45</span><br><span class="line">export CLASSPATH=.:$CLASSPATH:$JAVA_HOME/lib:$JAVA_HOME/jre/lib</span><br><span class="line">export PATH=$PATH:$JAVA_HOME/bin:$JAVA_HOME/jre/bin</span><br><span class="line"></span><br><span class="line"># set Hadoop environment</span><br><span class="line">export HADOOP_HOME=/usr/hadoop</span><br><span class="line">export HADOOP_CONF_DIR=/usr/hadoop/conf</span><br><span class="line">export PATH=$PATH:$HADOOP_HOME/bin</span><br><span class="line">　　</span><br><span class="line"># set HADOOP_CMD environment</span><br><span class="line">export HADOOP_CMD=/usr/hadoop/bin/hadoop</span><br><span class="line">export HADOOP_STREAMING=/usr/hadoop/contrib/streaming/hadoop-streaming-1.0.3.jar</span><br><span class="line"></span><br><span class="line"># set Hive environment</span><br><span class="line">export HIVE_HOME=/usr/hive</span><br><span class="line">export PATH=$PATH:$HIVE_HOME/bin</span><br><span class="line">export CLASSPATH=$CLASSPATH:$HIVE_HOME/lib</span><br><span class="line">export RHIVE_DATA=/usr/lib/R/rhive/data</span><br><span class="line">　　</span><br><span class="line">#set R_HOME</span><br><span class="line">export R_HOME=/usr/lib/R</span><br><span class="line">export CLASSPATH=.:/usr/lib/R/library/rJava/jri</span><br><span class="line">export LD_LIBRARY_PATH=/usr/lib/R/library/rJava/jri</span><br><span class="line">export PATH=$PATH:$R_HOME/bin</span><br><span class="line">export RServe_HOME=/usr/lib/R/library/RServe</span><br></pre></td></tr></table></figure>
+<h1 id="3-安装RHadoop环境"><a href="#3-安装RHadoop环境" class="headerlink" title="3.安装RHadoop环境"></a>3.安装RHadoop环境</h1><p>（rhdfs、rmr2、rhbase、RHive）</p>
+<h2 id="3-1安装rhdfs包-仅安装在namenode上-："><a href="#3-1安装rhdfs包-仅安装在namenode上-：" class="headerlink" title="3.1安装rhdfs包(仅安装在namenode上)："></a>3.1安装rhdfs包(仅安装在namenode上)：</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">R CMD INSTALL &quot;rhdfs_1.0.5.tar.gz&quot;</span><br><span class="line">在/etc/profile中设置环境变量HADOOP_HOME、HADOOP_CON_DIR、HADOOP_CMD</span><br><span class="line"></span><br><span class="line">export HADOOP_HOME=/usr/hadoop</span><br><span class="line">export HADOOP_CONF_DIR=/usr/hadoop/conf</span><br><span class="line">export HADOOP_CMD=/usr/hadoop/bin/hadoop</span><br><span class="line">安装后调用rhdfs，测试安装：</span><br><span class="line"></span><br><span class="line">&gt; library(&quot;rhdfs&quot;)</span><br><span class="line">Loading required package: rJava</span><br><span class="line"></span><br><span class="line">HADOOP_CMD=/usr/bin/hadoop</span><br><span class="line"></span><br><span class="line">Be sure to run hdfs.init()</span><br></pre></td></tr></table></figure>
+<h2 id="3-2安装rmr2包（各个主机上都要安装）："><a href="#3-2安装rmr2包（各个主机上都要安装）：" class="headerlink" title="3.2安装rmr2包（各个主机上都要安装）："></a>3.2安装rmr2包（各个主机上都要安装）：</h2><h3 id="3-2-1安装其依赖的7个包"><a href="#3-2-1安装其依赖的7个包" class="headerlink" title="3.2.1安装其依赖的7个包"></a>3.2.1安装其依赖的7个包</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">[root@master RHadoop-deps]# ls</span><br><span class="line">digest_0.6.3.tar.gz    plyr_1.8.tar.gz     reshape2_1.2.2.tar.gz  stringr_0.6.2.tar.gz    functional_0.4.tar.gz  Rcpp_0.10.3.tar.gz  RJSONIO_1.0-3.tar.gz</span><br><span class="line">执行安装：</span><br><span class="line">[root@master RHadoop-deps]#  R CMD INSTALL &quot;digest_0.6.3.tar.gz&quot;</span><br><span class="line">[root@master RHadoop-deps]#  R CMD INSTALL &quot;plyr_1.8.tar.gz&quot;</span><br><span class="line">[root@master RHadoop-deps]#  R CMD INSTALL &quot;reshape2_1.2.2.tar.gz&quot;</span><br><span class="line">[root@master RHadoop-deps]#  R CMD INSTALL &quot;stringr_0.6.2.tar.gz&quot;</span><br><span class="line">[root@master RHadoop-deps]#  R CMD INSTALL &quot;functional_0.4.tar.gz&quot;</span><br><span class="line">[root@master RHadoop-deps]#  R CMD INSTALL &quot;Rcpp_0.10.3.tar.gz&quot;</span><br><span class="line">[root@master RHadoop-deps]#  R CMD INSTALL &quot;RJSONIO_1.0-3.tar.gz&quot;</span><br></pre></td></tr></table></figure>
+<p>　　如果未安装，或者7个包安装不全，安装程序会提示其所依赖的的包要安装。</p>
+<h3 id="3-2-2R-CMD-INSTALL-“rmr2-2-2-0-tar-gz”"><a href="#3-2-2R-CMD-INSTALL-“rmr2-2-2-0-tar-gz”" class="headerlink" title="3.2.2R CMD INSTALL “rmr2_2.2.0.tar.gz”"></a>3.2.2R CMD INSTALL “rmr2_2.2.0.tar.gz”</h3><p>　　需要在/etc/profile中设置环境变量HADOOP_STREAMING</p>
+<pre><code><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">　　export HADOOP_STREAMING=/usr/hadoop/contrib/streaming/hadoop-streaming-1.0.3.jar</span><br></pre></td></tr></table></figure>
+</code></pre><p>　　安装测试：<br>　　安装好rhdfs和rmr2两个包后，我们就可以使用R尝试一些Hadoop的操作了。</p>
+<h2 id="3-3测试RHadoop"><a href="#3-3测试RHadoop" class="headerlink" title="3.3测试RHadoop"></a>3.3测试RHadoop</h2><h3 id="3-3-1基本的hdfs的文件操作。"><a href="#3-3-1基本的hdfs的文件操作。" class="headerlink" title="3.3.1基本的hdfs的文件操作。"></a>3.3.1基本的hdfs的文件操作。</h3><pre><code>查看hdfs文件目录
+</code></pre><p>　　hadoop的命令：<code>hadoop fs -ls /user</code><br>　　R语言函数：<code>hdfs.ls(&quot;/user/&quot;)</code><br>　　<br>　　查看hadoop数据文件<br>　　hadoop的命令：<code>hadoop fs -cat /user/hadoop/input/RHadoop.txt</code><br>　　R语言函数：<code>hdfs.cat(&quot;/user/hadoop/input/RHadoop.txt&quot;)</code></p>
+<h3 id="3-3-2执行一个rmr2算法的任务"><a href="#3-3-2执行一个rmr2算法的任务" class="headerlink" title="3.3.2执行一个rmr2算法的任务"></a>3.3.2执行一个rmr2算法的任务</h3><p>　　普通的R语言程序：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">　　&gt; small.ints = 1:10</span><br><span class="line">　　&gt; sapply(small.ints, function(x) x^2)</span><br></pre></td></tr></table></figure></p>
+<p>　　MapReduce的R语言程序：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">　　&gt; library(&quot;rhdfs&quot;)</span><br><span class="line">　　&gt; hdfs.init()</span><br><span class="line">　　&gt;hdfs.ls(&quot;/user/&quot;)</span><br><span class="line">　　&gt; library(&quot;rmr2&quot;)</span><br><span class="line">　　&gt; small.ints = to.dfs(1:10)</span><br><span class="line">　　&gt; mapreduce(input = small.ints, map = function(k, v) cbind(v, v^2))</span><br></pre></td></tr></table></figure>
+<h3 id="3-2-3rmr2-WordCount实例："><a href="#3-2-3rmr2-WordCount实例：" class="headerlink" title="3.2.3rmr2 WordCount实例："></a>3.2.3rmr2 WordCount实例：</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">　　#wordcunt示例</span><br><span class="line">　　input&lt;- &apos;/user/hadoop/input&apos;</span><br><span class="line">　　wordcount.mr&lt;-mapreduce(</span><br><span class="line">　　  input,</span><br><span class="line">　　  map=function(k,v)&#123;</span><br><span class="line">　　    key&lt;-unlist(strsplit(v,&quot; &quot;))</span><br><span class="line">　　    keyval(key,1)</span><br><span class="line">　　  &#125;</span><br><span class="line">　　  ,reduce=function(k,v)&#123;</span><br><span class="line">　　    keyval(k,sum(v))</span><br><span class="line">　　  &#125;</span><br><span class="line">　　)</span><br><span class="line">　　from.dfs(wordcount.mr)</span><br></pre></td></tr></table></figure>
+<p>#4安装RHive（各个主机上都要安装）：<br>RHive是一种通过Hive高性能查询来扩展R计算能力的包。它可以在R环境中非常容易的调用HQL， 也允许在Hive中使用R的对象和函数。理论上数据处理量可以无限扩展的Hive平台，搭配上数据挖掘的利器R环境， 堪称是一个完美的大数据分析挖掘的工作环境。</p>
+<h2 id="4-1Rserve包的安装："><a href="#4-1Rserve包的安装：" class="headerlink" title="4.1Rserve包的安装："></a>4.1Rserve包的安装：</h2><p>RHive依赖于Rserve，因此在安装R的要按照本文R的安装方式，即附带后面两个选项（–disable-nls –enable-R-shlib）<br>enable-R-shlib是将R作为动态链接库进行安装，这样像Rserve依赖于R动态库的包就可以安装了，但缺点会有20%左右的性能下降。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">install.packages(&quot;Rserve&quot;)								（在线安装）</span><br><span class="line">R CMD INSTALL /home/hadoop/Rserve_1.7-3.tar.gz 			（本地方式安装）</span><br></pre></td></tr></table></figure></p>
+<p>$R_HOME的目录下创建Rserv.conf文件，写入“remote enable’’保存并退出。通过scp -r 命令将Master节点上安装好的Rserve包，以及Rserv.conf文件拷贝到所有slave节点下。当然在节点不多的情况下也可以分别安装Rserve包、创建Rserv.conf。</p>
+<h3 id="4-1-1查看进程"><a href="#4-1-1查看进程" class="headerlink" title="4.1.1查看进程"></a>4.1.1查看进程</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">~ ps -aux|grep Rserve</span><br></pre></td></tr></table></figure>
+<h3 id="4-1-2杀掉刚才的Rserve守护进程"><a href="#4-1-2杀掉刚才的Rserve守护进程" class="headerlink" title="4.1.2杀掉刚才的Rserve守护进程"></a>4.1.2杀掉刚才的Rserve守护进程</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">~ kill -9 7142</span><br><span class="line"></span><br><span class="line">scp -r /usr/lib/R/library/Rserve 192.168.1.151:/usr/lib/R/library/</span><br><span class="line">scp -r /usr/lib/R/library/Rserv.conf 192.168.1.151:/usr/lib/R/library/</span><br><span class="line"></span><br><span class="line">在所有节点启动Rserve</span><br><span class="line">R CMD Rserve --RS-conf /usr/lib/R/library/Rserv.conf</span><br><span class="line"></span><br><span class="line">在master节点上telnet（如果未安装，通过shell命令yum install telnet安装）所有slave节点:</span><br><span class="line">yum install inetd</span><br><span class="line">yum install libncurses.so.4</span><br><span class="line">rpm -ivh /home/hadoop/telnet-0.10-31.i386.rpm</span><br><span class="line"></span><br><span class="line">telnet Master.Hadoop 6311</span><br><span class="line">显示Rsrv013QAP1则表示连接成功。</span><br></pre></td></tr></table></figure>
+<h2 id="4-2RHive包的安装："><a href="#4-2RHive包的安装：" class="headerlink" title="4.2RHive包的安装："></a>4.2RHive包的安装：</h2><p>安装RHive_0.0-7.tar.gz，并在master和所有slave节点上创建rhive的data目录，并赋予读写权限（最好将$R_HOME赋予777权限）<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">[root@master admin]# R CMD INSTALL RHive_0.0-7.tar.gz</span><br><span class="line">[root@master admin]# cd $R_HOME</span><br><span class="line">[root@master R]# mkdir -p rhive/data</span><br><span class="line">[root@master R]# chmod 777 -R rhive/data</span><br><span class="line">master和slave中的/etc/profile中配置环境变量RHIVE_DATA=/usr/lib/R/rhive/data</span><br><span class="line"></span><br><span class="line">export RHIVE_DATA=/usr/lib/R/rhive/data</span><br><span class="line">通过scp命令将master节点上安装的RHive包拷贝到所有的slave节点下：</span><br><span class="line"></span><br><span class="line">scp -r /usr/lib/R/library/RHive Slave1.Hadoop:/usr/lib/R/library/</span><br><span class="line">查看hdfs文件下的jar是否有读写权限</span><br><span class="line"></span><br><span class="line">hadoop fs -ls /rhive/lib</span><br><span class="line">安装rhive后，hdfs的根目录并没有rhive及其子目录lib，这就需要自己建立，并将/usr/lib/R/library/RHive/java下的rhive_udf.jar复制到该目录</span><br><span class="line"></span><br><span class="line">hadoop fs -put /usr/lib/R/library/RHive/java/rhive_udf.jar /rhive/lib</span><br><span class="line">否则在测试rhive.connect()的时候会报没有/rhive/lib/rhive_udf.jar目录或文件的错误。</span><br><span class="line">最后，在hive客户端（master、各slave均可）启动hive远程服务（rhive是通过thrift连接hiveserver的，需要要启动后台thrift服务）：</span><br><span class="line">hive --service hiveserver  &amp;</span><br></pre></td></tr></table></figure></p>
+<h2 id="4-3RHive的使用及测试："><a href="#4-3RHive的使用及测试：" class="headerlink" title="4.3RHive的使用及测试："></a>4.3RHive的使用及测试：</h2><h3 id="4-3-1启动RHive"><a href="#4-3-1启动RHive" class="headerlink" title="4.3.1启动RHive"></a>4.3.1启动RHive</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line">　　在所有节点启动Rserve(远程模式启动)</span><br><span class="line">　　R CMD Rserve --RS-enable-remote --RS-conf /usr/lib/R/library/Rserv.conf</span><br><span class="line">　　telnet Master.Hadoop 6311</span><br><span class="line">　　(</span><br><span class="line">　　#查看进程</span><br><span class="line">　　~ ps -aux|grep Rserve</span><br><span class="line">　　kill -9 进程号	#杀死Rserve</span><br><span class="line">　　#查看端口</span><br><span class="line">　　~ netstat -nltp|grep Rserve</span><br><span class="line">　　tcp     0      0 0.0.0.0:6311     0.0.0.0:*     LISTEN   7173/Rserve</span><br><span class="line">　　0 0.0.0.0:6311，表示不限IP访问了。</span><br><span class="line">　　）</span><br><span class="line">　　</span><br><span class="line">　　启动后台thrift服务</span><br><span class="line">　　hive --service hiveserver &amp;</span><br><span class="line">　　</span><br><span class="line">　　&gt; library(&quot;RHive&quot;)</span><br><span class="line">　　&gt; rhive.init()</span><br><span class="line">　　&gt; rhive.connect(&quot;Master.Hadoop&quot;)</span><br><span class="line">　　&gt; rhive.list.tables()</span><br><span class="line">　　&gt;d&lt;-rhive.query(&quot;select * from xp&quot;);</span><br><span class="line">　　&gt; class(d)</span><br><span class="line">　　&gt; rhive.close()</span><br></pre></td></tr></table></figure>
+<h3 id="4-3-2RHive-API"><a href="#4-3-2RHive-API" class="headerlink" title="4.3.2RHive API"></a>4.3.2RHive API</h3><p>从HIVE中获得表信息的函数，比如<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">rhive.list.tables：获得表名列表，支持pattern参数(正则表达式)，类似于HIVE的show tables</span><br><span class="line">rhive.desc.table：表的描述，HIVE中的desc table</span><br><span class="line">rhive.exist.table：</span><br></pre></td></tr></table></figure></p>
+<h3 id="4-3-3测试"><a href="#4-3-3测试" class="headerlink" title="4.3.3测试"></a>4.3.3测试</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">library(&quot;RHive&quot;)</span><br><span class="line">Loading required package: Rserve</span><br><span class="line">This is RHive 0.0-7. For overview type ?.RHive?.</span><br><span class="line">HIVE_HOME=/opt/cloudera/parcels/CDH-4.3.0-1.cdh4.3.0.p0.22/lib/hive</span><br><span class="line">[1] &quot;there is no slaves file of HADOOP. so you should pass hosts argument when you call rhive.connect().&quot;</span><br><span class="line">call rhive.init() because HIVE_HOME is set.</span><br><span class="line">Warning message:</span><br><span class="line">In file(file, &quot;rt&quot;) :</span><br><span class="line">  cannot open file &apos;/etc/hadoop/conf/slaves&apos;: No such file or directory</span><br><span class="line">rhive.connect()</span><br><span class="line">13/06/17 20:32:33 WARN conf.Configuration: fs.default.name is deprecated. Instead, use fs.defaultFS</span><br><span class="line">13/06/17 20:32:33 WARN conf.Configuration: fs.default.name is deprecated. Instead, use fs.defaultFS</span><br></pre></td></tr></table></figure>
+<p>表明安装成功，只是conf下面的slaves没有配置，在/etc/hadoop/conf中新建slaves文件，并写入各个slave的名称即可解决该警告。</p>
+<h3 id="4-4-4RHive的运行环境如下："><a href="#4-4-4RHive的运行环境如下：" class="headerlink" title="4.4.4RHive的运行环境如下："></a>4.4.4RHive的运行环境如下：</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">rhive.env()</span><br><span class="line">Hive Home Directory : /usr/hive</span><br><span class="line">Hadoop Home Directory : /usr/hadoop</span><br><span class="line">Hadoop Conf Directory : /usr/hadoop/conf</span><br><span class="line">No RServe</span><br><span class="line">Connected HiveServer : 127.0.0.1:10000</span><br><span class="line">Connected HDFS : hdfs://master:8020</span><br></pre></td></tr></table></figure>
+<h3 id="4-4-5RHive简单应用"><a href="#4-4-5RHive简单应用" class="headerlink" title="4.4.5RHive简单应用"></a>4.4.5RHive简单应用</h3><p>载入RHive包，令连接Hive，获取数据：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">library(RHive)</span><br><span class="line">rhive.connect(host = &apos;host_ip&apos;)</span><br><span class="line">d &lt;- rhive.query(&apos;select * from emp limit 1000&apos;)</span><br><span class="line">class(d)</span><br><span class="line">m &lt;- rhive.block.sample(data_sku, percent = 0.0001, seed = 0)</span><br><span class="line">rhive.close()</span><br></pre></td></tr></table></figure></p>
+<p>一般在系统中已经配置了host，因此可以直接rhive.connect()进行连接，记得最后要有rhive.close()操作。 通过HIVE查询语句，将HIVE中的目标数据加载至R环境下，返回的 d 是一个dataframe。</p>
+<p>实际上，rhive.query的实际用途有很多，一般HIVE操作都可以使用，比如变更scheme等操作：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">rhive.query(&apos;use scheme1&apos;)</span><br><span class="line">rhive.query(&apos;show tables&apos;)</span><br><span class="line">rhive.query(&apos;drop table emp&apos;)</span><br></pre></td></tr></table></figure>
+<p>但需要注意的是，数据量较大的情况需要使用rhive.big.query，并设置memlimit参数。</p>
+<p>将R中的对象通过构建表的方式存储到HIVE中需要使用</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">rhive.write.table(dat, tablename = &apos;usertable&apos;, sep = &apos;,&apos;)</span><br></pre></td></tr></table></figure>
+<p>而后使用join等HIVE语句获得相关建模数据。其实写到这儿，有需求的看官就应该明白了，这几项 RHive 的功能就足够 折腾些有趣的事情了。</p>
+<p>注1：其他关于在HIVE中调用R函数，暂时还没有应用，未来更新。<br>注2：rhive.block.sample这个函数需要在HIVE 0.8版本以上才能执行。</p>
+<h1 id="5-Rstudio-Server-安装记录"><a href="#5-Rstudio-Server-安装记录" class="headerlink" title="5.Rstudio Server 安装记录"></a>5.Rstudio Server 安装记录</h1><h2 id="5-1配置动态链接库和环境变量"><a href="#5-1配置动态链接库和环境变量" class="headerlink" title="5.1配置动态链接库和环境变量"></a>5.1配置动态链接库和环境变量</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">vi /etc/profile</span><br><span class="line">export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/usr/local/lib/R/lib/</span><br><span class="line">source /etc/profile</span><br><span class="line">vi /usr/lib64/R/etc/Renviron</span><br><span class="line">HADOOP_CMD=/usr/hadoop/bin/hadoop</span><br><span class="line">HADOOP_HOME=/usr/hadoop</span><br><span class="line">HADOOP_STREAMING=/usr/hadoop/contrib/streaming/hadoop-streaming-1.0.3.jar</span><br><span class="line">HIVE_HOME=/usr/hive</span><br><span class="line">RHIVE_DATA=/usr/lib/R/rhive/data</span><br></pre></td></tr></table></figure>
+<h2 id="5-2安装相关库"><a href="#5-2安装相关库" class="headerlink" title="5.2安装相关库"></a>5.2安装相关库</h2><p>确认以下动态链接库文件已安装 libcairo.so.2 libcrypto.so.6 libgfortran.so.1 libpango-1.0.so.0<br>libpangocairo-1.0.so.0 libssl.so.6 否则可以<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">yum install libcrypto.so.6 libgfortran.so.1 openssl098e-0.9.8e</span><br></pre></td></tr></table></figure></p>
+<h2 id="5-3下载安装rstudio-server"><a href="#5-3下载安装rstudio-server" class="headerlink" title="5.3下载安装rstudio-server"></a>5.3下载安装rstudio-server</h2><p><a href="http://download2.rstudio.org/rstudio-server-0.97.551-i686.rpm" target="_blank" rel="noopener">http://download2.rstudio.org/rstudio-server-0.97.551-i686.rpm</a><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">rpm -Uvh --nodeps rstudio-server-0.97.551-i686.rpm</span><br></pre></td></tr></table></figure></p>
+<h2 id="5-4使用rstudio-server"><a href="#5-4使用rstudio-server" class="headerlink" title="5.4使用rstudio-server"></a>5.4使用rstudio-server</h2><p><a href="http://192.168.1.150:8787/" target="_blank" rel="noopener">http://192.168.1.150:8787/</a></p>
+<a id="more"></a>
+<blockquote>
+<p><strong>关于作者</strong></p>
+<ul>
+<li>crazylook: pyhton,spark,ml,dl,recsys</li>
+<li>blog: <a href="https://crazylook.github.io/">https://crazylook.github.io/</a></li>
+<li>email: liuhongbin1990@foxmail.com</li>
+</ul>
+<p><strong>转载请注明出处：</strong><br><a href="https://crazylook.github.io/2014/05/15/demo/rhadoop-rhive-install/">https://crazylook.github.io/2014/05/15/demo/rhadoop-rhive-install/</a></p>
+</blockquote>
+
+      
+    </div>
+
+    <div>
+      
+        
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/RHadoop/" rel="tag">#RHadoop</a>
+          
+            <a href="/tags/RHive/" rel="tag">#RHive</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2014/05/14/hexo/create-blog/" rel="next" title="试用Hexo创建Blog">
+                <i class="fa fa-chevron-left"></i> 试用Hexo创建Blog
+              </a>
+            
+          </div>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2014/05/17/hive/notes-chapter5/" rel="prev" title="Hive学习笔记Chapter5——HQL:数据操作">
+                Hive学习笔记Chapter5——HQL:数据操作 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel ">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/avatar.jpg"
+               alt="crazylook" />
+          <p class="site-author-name" itemprop="name">crazylook</p>
+          <p class="site-description motion-element" itemprop="description">Python、Spark、ML、DL、推荐</p>
+        </div>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">13</span>
+              <span class="site-state-item-name">日志</span>
+            </a>
+          </div>
+
+          
+            <div class="site-state-item site-state-categories">
+              <a href="/categories">
+                <span class="site-state-item-count">6</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              <a href="/tags">
+                <span class="site-state-item-count">15</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        
+        
+
+        
+        
+
+      </section>
+
+      
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+            
+              
+            
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#1-系统及所需软件版本"><span class="nav-number">1.</span> <span class="nav-text">1.系统及所需软件版本</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#2-依赖安装（R语言包、rJava包）"><span class="nav-number">2.</span> <span class="nav-text">2.依赖安装（R语言包、rJava包）</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#2-1安装R语言包"><span class="nav-number">2.1.</span> <span class="nav-text">2.1安装R语言包</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-2安装rJava包"><span class="nav-number">2.2.</span> <span class="nav-text">2.2安装rJava包:</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#3-安装RHadoop环境"><span class="nav-number">3.</span> <span class="nav-text">3.安装RHadoop环境</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#3-1安装rhdfs包-仅安装在namenode上-："><span class="nav-number">3.1.</span> <span class="nav-text">3.1安装rhdfs包(仅安装在namenode上)：</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-2安装rmr2包（各个主机上都要安装）："><span class="nav-number">3.2.</span> <span class="nav-text">3.2安装rmr2包（各个主机上都要安装）：</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#3-2-1安装其依赖的7个包"><span class="nav-number">3.2.1.</span> <span class="nav-text">3.2.1安装其依赖的7个包</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-2-2R-CMD-INSTALL-“rmr2-2-2-0-tar-gz”"><span class="nav-number">3.2.2.</span> <span class="nav-text">3.2.2R CMD INSTALL “rmr2_2.2.0.tar.gz”</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-3测试RHadoop"><span class="nav-number">3.3.</span> <span class="nav-text">3.3测试RHadoop</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#3-3-1基本的hdfs的文件操作。"><span class="nav-number">3.3.1.</span> <span class="nav-text">3.3.1基本的hdfs的文件操作。</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-3-2执行一个rmr2算法的任务"><span class="nav-number">3.3.2.</span> <span class="nav-text">3.3.2执行一个rmr2算法的任务</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-2-3rmr2-WordCount实例："><span class="nav-number">3.3.3.</span> <span class="nav-text">3.2.3rmr2 WordCount实例：</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-1Rserve包的安装："><span class="nav-number">3.4.</span> <span class="nav-text">4.1Rserve包的安装：</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#4-1-1查看进程"><span class="nav-number">3.4.1.</span> <span class="nav-text">4.1.1查看进程</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-1-2杀掉刚才的Rserve守护进程"><span class="nav-number">3.4.2.</span> <span class="nav-text">4.1.2杀掉刚才的Rserve守护进程</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-2RHive包的安装："><span class="nav-number">3.5.</span> <span class="nav-text">4.2RHive包的安装：</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-3RHive的使用及测试："><span class="nav-number">3.6.</span> <span class="nav-text">4.3RHive的使用及测试：</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#4-3-1启动RHive"><span class="nav-number">3.6.1.</span> <span class="nav-text">4.3.1启动RHive</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-3-2RHive-API"><span class="nav-number">3.6.2.</span> <span class="nav-text">4.3.2RHive API</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-3-3测试"><span class="nav-number">3.6.3.</span> <span class="nav-text">4.3.3测试</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-4-4RHive的运行环境如下："><span class="nav-number">3.6.4.</span> <span class="nav-text">4.4.4RHive的运行环境如下：</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-4-5RHive简单应用"><span class="nav-number">3.6.5.</span> <span class="nav-text">4.4.5RHive简单应用</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#5-Rstudio-Server-安装记录"><span class="nav-number">4.</span> <span class="nav-text">5.Rstudio Server 安装记录</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#5-1配置动态链接库和环境变量"><span class="nav-number">4.1.</span> <span class="nav-text">5.1配置动态链接库和环境变量</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#5-2安装相关库"><span class="nav-number">4.2.</span> <span class="nav-text">5.2安装相关库</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#5-3下载安装rstudio-server"><span class="nav-number">4.3.</span> <span class="nav-text">5.3下载安装rstudio-server</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#5-4使用rstudio-server"><span class="nav-number">4.4.</span> <span class="nav-text">5.4使用rstudio-server</span></a></li></ol></li></ol></div>
+            
+          </div>
+        </section>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">crazylook</span>
+</div>
+
+<div class="powered-by">
+  由 <a class="theme-link" href="http://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Pisces
+  </a>
+</div>
+
+        
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+  <script type="text/javascript" src="/vendors/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/vendors/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.0.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.0.1"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.0.1"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.0.1"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.0.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.0.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.0.1"></script>
+
+
+
+  
+
+
+
+  
+
+
+
+  
+  
+  
+
+  
+
+  
+
+</body>
+</html>
