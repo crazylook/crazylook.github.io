@@ -1,0 +1,275 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+
+
+    
+    
+    
+    
+    
+  <url>
+    <loc>https://crazylook.github.io/2014/06/30/demo/vb-project-backup/</loc>
+    <lastmod>2018-02-09T04:09:15.791Z</lastmod>
+    <data>
+        <display>
+        <title>研二这一年那点项目</title>
+        <pubTime>2014-06-30T02:20:31.000Z</pubTime>
+        
+        <tag>研二</tag>
+         
+        <tag>项目</tag>
+         
+         
+           
+             
+              <breadCrumb title="那些年的小项目" url="https://crazylook.github.io/categories/%E9%82%A3%E4%BA%9B%E5%B9%B4%E7%9A%84%E5%B0%8F%E9%A1%B9%E7%9B%AE/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>https://crazylook.github.io/2014/05/15/demo/rhadoop-rhive-install/</loc>
+    <lastmod>2018-02-09T04:08:42.659Z</lastmod>
+    <data>
+        <display>
+        <title>RHadoop（rhdfs、rmr2、RHive）安装、配置</title>
+        <pubTime>2014-05-15T03:15:30.000Z</pubTime>
+        
+        <tag>RHadoop</tag>
+         
+        <tag>RHive</tag>
+         
+         
+           
+             
+              <breadCrumb title="那些年的小项目" url="https://crazylook.github.io/categories/%E9%82%A3%E4%BA%9B%E5%B9%B4%E7%9A%84%E5%B0%8F%E9%A1%B9%E7%9B%AE/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>https://crazylook.github.io/2014/06/18/demo/mahout-notes-day1/</loc>
+    <lastmod>2018-02-09T04:08:15.963Z</lastmod>
+    <data>
+        <display>
+        <title>Mahout开发环境搭建及推荐系统初探</title>
+        <pubTime>2014-06-18T07:55:57.000Z</pubTime>
+        
+        <tag>Mahout</tag>
+         
+         
+           
+             
+              <breadCrumb title="那些年的小项目" url="https://crazylook.github.io/categories/%E9%82%A3%E4%BA%9B%E5%B9%B4%E7%9A%84%E5%B0%8F%E9%A1%B9%E7%9B%AE/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>https://crazylook.github.io/2014/05/17/hexo/theme-alteration/</loc>
+    <lastmod>2018-02-09T04:07:36.084Z</lastmod>
+    <data>
+        <display>
+        <title>Hexo主题优化</title>
+        <pubTime>2014-05-17T03:14:41.000Z</pubTime>
+        
+        <tag>Hexo优化</tag>
+         
+         
+           
+             
+              <breadCrumb title="Hexo" url="https://crazylook.github.io/categories/Hexo/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>https://crazylook.github.io/2014/09/09/hexo/git-notes1/</loc>
+    <lastmod>2018-02-09T04:06:50.456Z</lastmod>
+    <data>
+        <display>
+        <title>git使用记录</title>
+        <pubTime>2014-09-09T15:25:31.000Z</pubTime>
+        
+        <tag>git</tag>
+         
+         
+           
+             
+              <breadCrumb title="Hexo" url="https://crazylook.github.io/categories/Hexo/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>https://crazylook.github.io/2014/05/14/hexo/create-blog/</loc>
+    <lastmod>2018-02-09T04:06:13.780Z</lastmod>
+    <data>
+        <display>
+        <title>试用Hexo创建Blog</title>
+        <pubTime>2014-05-14T04:25:31.000Z</pubTime>
+        
+         
+           
+             
+              <breadCrumb title="Hexo" url="https://crazylook.github.io/categories/Hexo/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>https://crazylook.github.io/2014/06/10/hive/notes-chapter13-udf/</loc>
+    <lastmod>2018-02-09T04:04:38.117Z</lastmod>
+    <data>
+        <display>
+        <title>Hive UDF函数开发</title>
+        <pubTime>2014-06-10T02:55:57.000Z</pubTime>
+        
+        <tag>HiveUDF</tag>
+         
+         
+           
+             
+              <breadCrumb title="Hive" url="https://crazylook.github.io/categories/Hive/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>https://crazylook.github.io/2014/05/27/hive/notes-chapter6/</loc>
+    <lastmod>2018-02-09T04:03:57.541Z</lastmod>
+    <data>
+        <display>
+        <title>Hive学习笔记Chapter6——HQL:查询</title>
+        <pubTime>2014-05-27T03:36:57.000Z</pubTime>
+        
+        <tag>Hive查询</tag>
+         
+         
+           
+             
+              <breadCrumb title="Hive" url="https://crazylook.github.io/categories/Hive/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>https://crazylook.github.io/2014/05/17/hive/notes-chapter5/</loc>
+    <lastmod>2018-02-09T04:03:36.001Z</lastmod>
+    <data>
+        <display>
+        <title>Hive学习笔记Chapter5——HQL:数据操作</title>
+        <pubTime>2014-05-17T02:55:57.000Z</pubTime>
+        
+        <tag>Hive操作</tag>
+         
+         
+           
+             
+              <breadCrumb title="Hive" url="https://crazylook.github.io/categories/Hive/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>https://crazylook.github.io/2015/02/06/python/notes-ConfigParser/</loc>
+    <lastmod>2018-02-09T04:02:59.886Z</lastmod>
+    <data>
+        <display>
+        <title>Python ConfigParser的使用</title>
+        <pubTime>2015-02-06T02:15:31.000Z</pubTime>
+        
+        <tag>python</tag>
+         
+        <tag>ConfigParser</tag>
+         
+         
+           
+             
+              <breadCrumb title="python" url="https://crazylook.github.io/categories/python/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>https://crazylook.github.io/2015/02/06/python/notes-Regulator/</loc>
+    <lastmod>2018-02-09T04:02:22.874Z</lastmod>
+    <data>
+        <display>
+        <title>Python 正则表达式</title>
+        <pubTime>2015-02-06T07:15:31.000Z</pubTime>
+        
+        <tag>python</tag>
+         
+        <tag>正则表达式</tag>
+         
+         
+           
+             
+              <breadCrumb title="python" url="https://crazylook.github.io/categories/python/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>https://crazylook.github.io/2018/01/18/recsys/spark-CF/</loc>
+    <lastmod>2018-02-09T04:00:19.232Z</lastmod>
+    <data>
+        <display>
+        <title>Spark中实现ItemCF、UserCF</title>
+        <pubTime>2018-01-18T02:20:00.000Z</pubTime>
+        
+        <tag>ItemCF</tag>
+         
+         
+           
+             
+              <breadCrumb title="recsys" url="https://crazylook.github.io/categories/recsys/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>https://crazylook.github.io/2014/06/24/spark/firstexploration/</loc>
+    <lastmod>2018-02-09T03:55:37.193Z</lastmod>
+    <data>
+        <display>
+        <title>Spark初探——关于分享Spark的一些感悟</title>
+        <pubTime>2014-06-24T04:20:31.000Z</pubTime>
+        
+        <tag>Spark</tag>
+         
+         
+           
+             
+              <breadCrumb title="Spark" url="https://crazylook.github.io/categories/Spark/"/>
+          
+        </display>
+    </data>
+    </url>
+
+</urlset>
