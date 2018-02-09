@@ -51,6 +51,19 @@ git commit -m 'remove'
 git push
 ```
 
+
+## 1.9 hexo 常用git
+```{bash}
+git init
+git checkout -b hexo
+vi .gitignore
+git add .
+git commit -m 'first'
+git push origin :hexo
+git push origin hexo
+```
+
+
 <!--more-->
 >**关于作者**
 >- crazylook: pyhton,spark,ml,dl,recsys
